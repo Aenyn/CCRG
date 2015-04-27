@@ -23,6 +23,7 @@
 						document.getElementById('newdate').innerHTML = curdate;
 						if (curdate>olddate) {
 							getMessages();
+							getAnnonce();
 							document.title = 'CCRG (New messages)';
 						}
 					}
@@ -50,6 +51,15 @@
 						}
 						document.getElementById('main').innerHTML=result;
 						document.getElementById('main').scrollTop = document.getElementById('main').scrollHeight;
+					}
+				});
+			}
+			
+			function getAnnonce() {
+				$.ajax({
+					url: "services/get_annonce.php",
+					success:function(result) {
+						document.getElementById('announcement').innerHTML=result;
 					}
 				});
 			}
@@ -141,8 +151,8 @@
 					} else if (annonce.test(text)) {						
 						matched = true;
 						$.ajax({
-							url: "services/annonce.php",
-							data: {announcement:text.substring(8)},
+							url: "services/set_annonce.php",
+							data: {annonce:text.substring(8)},
 							method: "POST",
 							success: function(result) {
 								document.getElementById('announcement').innerHTML = result;
