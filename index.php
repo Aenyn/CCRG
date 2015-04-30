@@ -107,6 +107,7 @@
 					var ban = /\/ban (\w{1,15})/;
 					var ip = /\/ip (\w{1,25})/;
 					var annonce = /\/annonce (\w+)/;
+					var roll = /\/roll ([0-9]+) ([0-9]+)/;
 					var matched = false;
 					if(nick.test(text)) {
 						matched = true;
@@ -157,6 +158,14 @@
 							success: function(result) {
 								document.getElementById('announcement').innerHTML = result;
 							}
+						});
+					} else if (roll.test(text)) {						
+						matched = true;
+						match = roll.exec(text);
+						$.ajax({
+							url: "services/dice_roll.php",
+							data: {diceNb:match[1], sideNb:match[2]},
+							method: "POST"
 						});
 					}
 					if (!matched) {
