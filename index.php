@@ -50,7 +50,9 @@
 							window.location.replace('http://www.staggeringbeauty.com/');
 						}
 						document.getElementById('main').innerHTML=result;
-						document.getElementById('main').scrollTop = document.getElementById('main').scrollHeight;
+						if(!locked) {
+							document.getElementById('main').scrollTop = document.getElementById('main').scrollHeight;
+						}
 					}
 				});
 			}
@@ -73,7 +75,9 @@
 						var toRemove = document.getElementById('date_last_message');
 						toRemove.parentNode.removeChild(toRemove);
 						document.getElementById('main').innerHTML = document.getElementById('main').innerHTML + result;
-						document.getElementById('main').scrollTop = document.getElementById('main').scrollHeight;
+						if(!scrollLock) {
+							document.getElementById('main').scrollTop = document.getElementById('main').scrollHeight;
+						}
 					}
 				});
 			}
@@ -107,7 +111,7 @@
 					var ban = /\/ban (\w{1,15})/;
 					var ip = /\/ip (\w{1,25})/;
 					var annonce = /\/annonce (\w+)/;
-					var roll = /\/roll ([0-9]+) ([0-9]+)/;
+					var roll = /\/roll ([0-9]+) ([0-9]+) ?(\w)*/;
 					var matched = false;
 					if(nick.test(text)) {
 						matched = true;
@@ -164,7 +168,7 @@
 						match = roll.exec(text);
 						$.ajax({
 							url: "services/dice_roll.php",
-							data: {diceNb:match[1], sideNb:match[2]},
+							data: {diceNb:match[1], sideNb:match[2], param:match[3]},
 							method: "POST"
 						});
 					}
@@ -174,6 +178,10 @@
 				} else {
 					sendMessage(username, document.getElementById('message_prompt').value);
 				}
+			}
+			
+			function toggleLock() {
+				locked = !locked;
 			}
 			<?php if(!isset($_SESSION['name'])) {
 			echo "var username = window.prompt('Username', 'Noob');\n
@@ -193,6 +201,7 @@
 			<div id="prompt">
 				<form onsubmit="return submitForm();">
 				<span id="user_name"></span> > <input type="text" id="message_prompt" autocomplete="off" maxlength="255"/>
+				<input type="checkbox" onclick="toggleLock()" />
 				</form>
 			</div>
 			<div id="announcement">
@@ -202,6 +211,7 @@
 		<div id="online"></div>
 		<script src="jquery.js"></script>
 		<script>
+			var locked = false;
 			document.getElementById('user_name').innerHTML = username;
 			document.getElementById('online').innerHTML = "<p>" + username + "</p>" + document.getElementById('online').innerHTML;
 			document.getElementById('message_prompt').focus();
