@@ -111,7 +111,9 @@
 					var ban = /\/ban (\w{1,15})/;
 					var ip = /\/ip (\w{1,25})/;
 					var annonce = /\/annonce (\w+)/;
-					var roll = /\/roll ([0-9]+) ([0-9]+) ?(\w)*/;
+					//var roll = /\/roll ([0-9]+)[d,D, ]([0-9]+) ?([\w, ]*)/;
+					var roll = /\/roll ([0-9]+)[dD ]([0-9]+)[\+, ]?(\d+)? ?([\w, ]*)/;
+					var krako = /\/krako (\w+)/;
 					var matched = false;
 					if(nick.test(text)) {
 						matched = true;
@@ -168,7 +170,20 @@
 						match = roll.exec(text);
 						$.ajax({
 							url: "services/dice_roll.php",
-							data: {diceNb:match[1], sideNb:match[2], param:match[3]},
+							data: {diceNb:match[1], sideNb:match[2], bonus:match[3], params:(match[4]+' ')},
+							method: "POST",
+							success: function(result) {
+								if(result.length>0) {
+									alert(result);
+								}
+							}
+						});
+					} else if (krako.test(text)) {						
+						matched = true;
+						match = krako.exec(text);
+						$.ajax({
+							url: "services/krako.php",
+							data: {user:match[1]},
 							method: "POST"
 						});
 					}

@@ -8,12 +8,12 @@
 	include 'connectbdd.php';
 
     $send = false;
-    $content = '';
+    $content = ' reçoit un point Krako!';
     $writer = '';
 
 
-    if(isset($_POST['content']) && isset($_SESSION['name'])) {
-        $content = htmlspecialchars($_POST['content']);
+    if(isset($_POST['user']) && isset($_SESSION['name'])) {
+        $user = htmlspecialchars($_POST['user']);
         $writer = htmlspecialchars($_SESSION['name']);
         if ((strlen($content)>0)&&(strlen($writer)>0)) {
 			$firstLetter = $writer[0];
@@ -31,10 +31,10 @@
 			$slow->execute(array(':ip' => $_SERVER['REMOTE_ADDR']));
 		
 			$query = "INSERT INTO ccrg_messages(date, content, writer, ip)
-				VALUES (NOW(), :content, :writer, :ip)";
+				VALUES (NOW(), :content, 'Krako manager', :ip)";
 
 			$request = $bdd->prepare($query);
-			$request->execute(array(':content' => $content, ':writer' => $writer, ':ip' => $_SERVER['REMOTE_ADDR']));
+			$request->execute(array(':content' => $user . $content, ':ip' => $_SERVER['REMOTE_ADDR']));
 		}
     }
 	include 'kill_connection.php';
