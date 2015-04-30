@@ -17,7 +17,7 @@
         $writer = htmlspecialchars($_SESSION['name']);
         if ((strlen($content)>0)&&(strlen($writer)>0)) {
 			$firstLetter = $writer[0];
-			if(preg_match('/\w/',$firstLetter)&&(strpos(strtoupper($writer),'SYSTEM ANN')===false)) {
+			if(preg_match('/\w/',$firstLetter)&&(strpos(strtoupper($writer),'SYSTEM ANN')===false)&&(strpos(strtoupper($writer),'DICE ROLLER')===false)) {
 				$send = true;
 			}
         }

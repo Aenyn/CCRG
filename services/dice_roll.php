@@ -20,7 +20,7 @@
         $writer = htmlspecialchars($_SESSION['name']);
         if ((strlen($writer)>0)) {
 			$firstLetter = $writer[0];
-			if(preg_match('/\w/',$firstLetter)&&(strpos(strtoupper($writer),'SYSTEM ANN')===false)) {
+			if(preg_match('/\w/',$firstLetter)&&(strpos(strtoupper($writer),'SYSTEM ANN')===false)&&(strpos(strtoupper($writer),'DICE ROLLER')===false)) {
 				$total = 0;
 				$detail = '(';
 				for($i=0; $i<$diceNb; $i++) {
