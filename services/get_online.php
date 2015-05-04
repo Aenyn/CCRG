@@ -15,7 +15,7 @@
 
 		$query = $bdd->query("SELECT name, afk, afk_message
 			FROM ccrg_users
-			WHERE last_seen > DATE_SUB(NOW(), INTERVAL 30 SECOND)
+			WHERE last_seen > DATE_SUB(NOW(), INTERVAL 10 SECOND)
 			ORDER BY last_seen DESC");
 		while($messages=$query->fetch()) {
 			if($messages['afk']==1) {

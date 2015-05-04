@@ -8,7 +8,7 @@
 	include 'connectbdd.php';
 
     $send = false;
-    $content = ' reçoit un point Krako!';
+    $content = ' reçoit un point Krako! (';
     $writer = '';
 
 
@@ -28,13 +28,23 @@
 		if($check['isBanned']==0) {		
 			
 			$slow = $bdd->prepare("INSERT INTO ccrg_blacklist (ip, end_date) VALUES (:ip, DATE_ADD(NOW(), INTERVAL 1 SECOND))");
-			$slow->execute(array(':ip' => $_SERVER['REMOTE_ADDR']));
+			$slow->execute(array(':ip' => $_SERVER['REMOTE_ADDR']));		
+			
+			$query = "UPDATE ccrg_users SET points_krako = points_krako + 1 WHERE name = :name";
+			$updateKrako = $bdd->prepare($query);
+			$updateKrako->execute(array(':name' => $user));
+			
+			$query = "SELECT points_krako FROM ccrg_users WHERE name = :name";
+			$nbKrako = $bdd->prepare($query);
+			$nbKrako->execute(array(':name' => $user));
+			$nbKrako = $nbKrako->fetch();
 		
 			$query = "INSERT INTO ccrg_messages(date, content, writer, ip)
 				VALUES (NOW(), :content, 'Krako manager', :ip)";
 
 			$request = $bdd->prepare($query);
-			$request->execute(array(':content' => $user . $content, ':ip' => $_SERVER['REMOTE_ADDR']));
+			$request->execute(array(':content' => $user . $content . $nbKrako['points_krako'] . ')' , ':ip' => $_SERVER['REMOTE_ADDR']));
+			
 		}
     }
 	include 'kill_connection.php';

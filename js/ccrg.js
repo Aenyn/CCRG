@@ -101,6 +101,7 @@ function parseCommand() {
 		var annonce = /\/annonce (\w+)/;
 		var roll = /\/roll ([0-9]+)[dD ]([0-9]+)[\+, ]?(\d+)? ?([\w, ]*)/;
 		var krako = /\/krako (\w+)/;
+		var krakount = /\/krakount (\w+)/;
 		var link = /\/link ([\w,\.,\/,:]+) ?([\w,\.,\/, ]+)?/;
 		var scroll = /\/scroll/;
 		var noscroll = /\/noscroll/;
@@ -178,6 +179,17 @@ function parseCommand() {
 				url: "services/krako.php",
 				data: {user:match[1]},
 				method: "POST"
+			});
+		} else if (krakount.test(text)) {						
+			matched = true;
+			match = krakount.exec(text);
+			$.ajax({
+				url: "services/get_krako.php",
+				data: {name:match[1]},
+				method: "POST",
+				success:function(result) {
+					alert(result);
+				}
 			});
 		} else if (link.test(text)) {						
 			matched = true;
