@@ -113,10 +113,7 @@
 					var annonce = /\/annonce (\w+)/;
 					var roll = /\/roll ([0-9]+)[dD ]([0-9]+)[\+, ]?(\d+)? ?([\w, ]*)/;
 					var krako = /\/krako (\w+)/;
-					var link = /\/link ([\w,\.,\/,:]+) ?([\w,\.,\/, ]+)?/;
-					var scroll = /\/scroll/;
-					var noscroll = /\/noscroll/;
-					var reveal = /\/reveal/;
+					var link = /\/link ([\w,\.,\/]+) ?([\w,\.,\/, ]+)?/;
 					var matched = false;
 					if(nick.test(text)) {
 						matched = true;
@@ -195,22 +192,9 @@
 						$.ajax({
 							url: "services/link.php",
 							data: {link:match[1], title:match[2]},
-							method: "POST"
-						});
-					} else if (scroll.test(text)) {						
-						matched = true;
-						locked = false;
-					} else if (noscroll.test(text)) {						
-						matched = true;
-						locked = true;
-					} else if (reveal.test(text)) {						
-						matched = true;
-						$.ajax({
-							url: "services/reveal_dice.php",
-							success: function(result) {
-								if(result.length>0) {
-									alert(result);
-								}
+							method: "POST",
+							success: function() {
+								alert(match[2]);
 							}
 						});
 					}
@@ -244,7 +228,7 @@
 			<div id="prompt">
 				<form onsubmit="return submitForm();">
 				<span id="user_name"></span> > <input type="text" id="message_prompt" autocomplete="off" maxlength="255"/>
-				<!--input type="checkbox" onclick="toggleLock()" /-->
+				<input type="checkbox" onclick="toggleLock()" />
 				</form>
 			</div>
 			<div id="announcement">
