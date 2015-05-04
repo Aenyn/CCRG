@@ -13,12 +13,16 @@
 			ON DUPLICATE KEY UPDATE last_seen=NOW(), ip=:ip");
 		$insertUser->execute(array(':name' => $_SESSION['name'], ':ip' => $_SERVER['REMOTE_ADDR']));
 
-		$query = $bdd->query("SELECT name
+		$query = $bdd->query("SELECT name, afk, afk_message
 			FROM ccrg_users
 			WHERE last_seen > DATE_SUB(NOW(), INTERVAL 30 SECOND)
 			ORDER BY last_seen DESC");
 		while($messages=$query->fetch()) {
-			echo '<p>' . $messages['name'] . '</p>';
+			if($messages['afk']==1) {
+				echo '<p class="afk">' . $messages['name'] . ' (' . $messages['afk_message'] .')</p>';
+			} else {
+				echo '<p>' . $messages['name'] . '</p>';
+			}
 		}
 	}
 

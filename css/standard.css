@@ -39,6 +39,10 @@
 	width: 100%;
 }
 
+.afk {
+	font-style: italic;
+}
+
 .hidden {
 	display: none;
 }
