@@ -35,7 +35,7 @@ function getMessages() {
 		success:function(result) {
 			if(result=='kick') {
 				window.alert('Vous avez été kické de ce channel');
-				window.location.replace('http://www.staggeringbeauty.com/');
+				window.location.replace('http://www.google.com/');
 			}
 			document.getElementById('main').innerHTML=result;
 			if(!locked) {
@@ -95,7 +95,7 @@ function parseCommand() {
 	var text = document.getElementById('message_prompt').value;
 	if(commandPattern.test(text)) {
 		var nick = /\/nick \w{1,25}/;
-		var kick = /\/kick (\w{1,25}) (\w+)/;
+		var kick = /\/kick (\w{1,25})/;
 		var ban = /\/ban (\w{1,15})/;
 		var ip = /\/ip (\w{1,25})/;
 		var annonce = /\/annonce (\w+)/;
@@ -121,13 +121,11 @@ function parseCommand() {
 		}
 		else if(kick.test(text)) {
 			matched = true;
+			match = kick.exec(text);			
 			$.ajax({
 				url: "services/kick.php",
-				data: {user:text.substring(6)},
-				method: "POST",
-				success: function() {
-					sendMessage('System announcement', text.substring(11) + ' has been kicked');
-				}
+				data: {user:match[1]},
+				method: "POST"
 			});
 		} else if (ban.test(text)) {
 			matched = true;
