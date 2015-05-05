@@ -1,5 +1,8 @@
 <?php 
 	session_start();
+	if(!isset($_SESSION['name'])) {
+		header('Location: http://www.panicot.fr/ccrg/login.php');
+	}
 ?>
 <!doctype html>
 <html>
@@ -11,12 +14,7 @@
 	<body>
 		<script src='js/ccrg.js'></script>
 		<script>	
-			<?php if(!isset($_SESSION['name'])) {
-			echo "var username = window.prompt('Username', 'Noob');\n
-				if(username == null) {\n
-					username = 'IMAFAG';\n
-				}";
-			} else echo "var username = '" . $_SESSION['name'] . "'";?>
+			<?php echo "var username = '" . $_SESSION['name'] . "'";?>
 			
 		</script>
 		<div id="newdate" class="hidden"></div>
@@ -46,24 +44,12 @@
 			document.onmousemove = restoreTitle;
 			document.onmousedown = restoreTitle;
 			document.onkeypress = restoreTitle;
-			<?php if(!isset($_SESSION['name'])) {
-			echo "$.ajax({
-					url: 'services/connexion_std.php',
-					method : 'POST',
-					data: {name:username},
-					success : function() {
-						getMessages();
-						setInterval(checkMessages, 500);
-						getOnline();
-						setInterval(getOnline, 5000);
-						}						
-			});";
-			} else {
-				echo "getMessages();
-						setInterval(checkMessages, 500);
-						getOnline();
-						setInterval(getOnline, 1000);";
-			}?>
+			<?php 
+			echo	"getMessages();
+					setInterval(checkMessages, 500);
+					getOnline();
+					setInterval(getOnline, 1000);";
+			?>
 		</script>
 	</body>
 </html>
