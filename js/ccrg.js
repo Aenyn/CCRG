@@ -35,7 +35,7 @@ function getMessages() {
 		success:function(result) {
 			if(result=='kick') {
 				window.alert('Vous avez été kické de ce channel');
-				window.location.replace('http://www.google.com/');
+				window.location.replace('http://www.staggeringbeauty.com/');
 			}
 			document.getElementById('main').innerHTML=result;
 			if(!locked) {
