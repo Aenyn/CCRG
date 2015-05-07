@@ -8,11 +8,20 @@
 	include 'connectbdd.php';
 
 	if(isset($_POST['annonce'])) {
-		$query = $bdd->prepare("INSERT INTO ccrg_annonces(texte, date)
-			VALUES (:texte, NOW())");
-		$query->execute(":texte" => $_POST['annonce']);
-		$annonce = $query->fetch();
-		echo $annonce['texte'];
+		if($_SESSION['permission'] == 'A') {
+
+			$annonce = "INSERT INTO ccrg_annonces(date, texte)
+				VALUES (NOW(), :texte)";
+		
+			$query = $bdd->prepare($annonce);
+			$query->execute(array(":texte" => $_POST['annonce']));
+			
+			$message = "INSERT INTO ccrg_messages(date, content, writer, ip)
+				VALUES (NOW(), :content, 'System Announcement', :ip)";
+
+			$request = $bdd->prepare($message);
+			$request->execute(array(':content' => "Nouvelle annonce: " . $_POST['annonce'], ':ip' => $_SERVER['REMOTE_ADDR']));
+		}
 	}
 				
 	include 'kill_connection.php';

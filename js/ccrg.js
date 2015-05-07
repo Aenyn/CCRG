@@ -98,11 +98,13 @@ function parseCommand() {
 		var kick = /\/kick (\w{1,25})/;
 		var ban = /\/ban (\w{1,15})/;
 		var ip = /\/ip (\w{1,25})/;
-		var annonce = /\/annonce (\w+)/;
+		var annonce = /\/annonce ([\w\W]+)/;
 		var roll = /\/roll ([0-9]+)[dD ]([0-9]+)[\+, ]?(\d+)? ?([\w, ]*)/;
 		var krako = /\/krako (\w+)/;
 		var krakount = /\/krakount (\w+)/;
-		var link = /\/link ([\w,\.,\/,:]+) ?([\w,\.,\/, ]+)?/;
+		var clausse = /\/clausse (\w+)/;
+		var clausseCount = /\/clount (\w+)/;
+		var link = /\/link ([\w,\.,\/,:,\-,\+,\\,\?,\&,=]+) ?([\w,\.,\/, ]+)?/;
 		var scroll = /\/scroll/;
 		var noscroll = /\/noscroll/;
 		var reveal = /\/reveal/;
@@ -149,13 +151,11 @@ function parseCommand() {
 			});
 		} else if (annonce.test(text)) {						
 			matched = true;
+			match = annonce.exec(text);
 			$.ajax({
 				url: "services/set_annonce.php",
-				data: {annonce:text.substring(8)},
-				method: "POST",
-				success: function(result) {
-					document.getElementById('announcement').innerHTML = result;
-				}
+				data: {annonce:match[1]},
+				method: "POST"
 			});
 		} else if (roll.test(text)) {						
 			matched = true;
@@ -183,6 +183,25 @@ function parseCommand() {
 			match = krakount.exec(text);
 			$.ajax({
 				url: "services/get_krako.php",
+				data: {name:match[1]},
+				method: "POST",
+				success:function(result) {
+					alert(result);
+				}
+			});
+		} else if (clausse.test(text)) {						
+			matched = true;
+			match = clausse.exec(text);
+			$.ajax({
+				url: "services/clausse.php",
+				data: {user:match[1]},
+				method: "POST"
+			});
+		} else if (clausseCount.test(text)) {						
+			matched = true;
+			match = clount.exec(text);
+			$.ajax({
+				url: "services/get_clausse.php",
 				data: {name:match[1]},
 				method: "POST",
 				success:function(result) {
