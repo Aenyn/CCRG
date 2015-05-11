@@ -9,11 +9,11 @@
 	
     if(isset($_SESSION['name'])) {
 		$check = $bdd->prepare("SELECT kicked FROM ccrg_users WHERE name = :name");
-		$check->execute(array(':name' => $_SESSION['name']));
+		$check->execute(array(':name' => substr($_SESSION['name'], 0, 25)));
 		$check = $check->fetch();
 		if($check['kicked']!=0) {
 			$q = $bdd->prepare("UPDATE ccrg_users SET kicked = 0 WHERE name = :name");
-			$q->execute(array(':name' => $_SESSION['name']));
+			$q->execute(array(':name' => substr($_SESSION['name'], 0, 25)));
 			echo "kick";
 		}  else {
 			if(isset($_SESSION['date'])) {
