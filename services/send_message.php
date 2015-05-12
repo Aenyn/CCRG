@@ -35,7 +35,7 @@
 
 			$request = $bdd->prepare($query);
 			
-			if(substr($content,0,7)==="http://") {
+			if((substr($content,0,7)==="http://")||(substr($content,0,8)==="https://")) {
 				$content = "<a href='" . $content ."'>". $content . "</a>";
 			}
 			
