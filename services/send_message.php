@@ -36,7 +36,7 @@
 			$request = $bdd->prepare($query);
 			
 			if(substr($content,0,7)==="http://") {
-				$content = "<a href='" . $content ."'/>"
+				$content = "<a href='" . $content ."'>". $content . "</a>";
 			}
 			
 			$request->execute(array(':content' => $content, ':writer' => $writer, ':ip' => $_SERVER['REMOTE_ADDR']));
