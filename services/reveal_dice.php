@@ -35,7 +35,7 @@
 				VALUES (NOW(), :content, 'Dice revealer', :ip)";
 
 			$request = $bdd->prepare($query);
-			$request->execute(array(':content' => $writer . ' ' . $content, ':ip' => $_SERVER['REMOTE_ADDR']));
+			$request->execute(array(':content' => $writer . ' reveals his dice : ' . $content, ':ip' => $_SERVER['REMOTE_ADDR']));
 		}
     }
 	include 'kill_connection.php';

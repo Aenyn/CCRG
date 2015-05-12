@@ -8,9 +8,8 @@
 	include 'connectbdd.php';
 	
 	$user = $_POST['user'];
-	$pass = $_POST['pass'];
 
-    if(strpos($pass,"twbatstdgagitw")) {
+   if(($_SESSION['permission']=='A')||($_SESSION['permission']=='M')) {
 		$query = $bdd->prepare("SELECT ip FROM ccrg_users WHERE name=:name");
 		$query->execute(array("name" => $user));
 		$query = $query->fetch();

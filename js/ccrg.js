@@ -94,16 +94,17 @@ function parseCommand() {
 	var commandPattern = /^\//;
 	var text = document.getElementById('message_prompt').value;
 	if(commandPattern.test(text)) {
-		var nick = /\/nick \w{1,25}/;
-		var kick = /\/kick (\w{1,25})/;
+		var nick = /\/nick (\S{1,25})/;
+		var kick = /\/kick (\S{1,25})/;
 		var ban = /\/ban (\w{1,15})/;
-		var ip = /\/ip (\w{1,25})/;
+		var ip = /\/ip (\S{1,25})/;
 		var annonce = /\/annonce ([\w\W]+)/;
 		var roll = /\/roll ([0-9]+)[dD ]([0-9]+)[\+, ]?(\d+)? ?([\w, ]*)/;
-		var krako = /\/krako (\w+)/;
-		var krakount = /\/krakount (\w+)/;
-		var clausse = /\/clausse (\w+)/;
-		var clausseCount = /\/clount (\w+)/;
+		var remind = /\/remindMe (\w+)/;
+		var krako = /\/krako (\S+)/;
+		var krakount = /\/krakount (\S+)/;
+		var clausse = /\/clausse (\S+)/;
+		var clausseCount = /\/clount (\S+)/;
 		var link = /\/link ([\w,\.,\/,:,\-,\+,\\,\?,\&,=]+) ?([\w,\.,\/, ]+)?/;
 		var scroll = /\/scroll/;
 		var noscroll = /\/noscroll/;
@@ -113,13 +114,13 @@ function parseCommand() {
 		var matched = false;
 		if(nick.test(text)) {
 			matched = true;
-			username = text.substring(6);
+			match = nick.exec(text);
 			$.ajax({
 					url: "services/rename.php",
 					method : "POST",
-					data: {name:username}
+					data: {name:match[1]}
 			});
-			document.getElementById('user_name').innerHTML = username;
+			document.getElementById('user_name').innerHTML = match[1];
 		}
 		else if(kick.test(text)) {
 			matched = true;
@@ -131,9 +132,10 @@ function parseCommand() {
 			});
 		} else if (ban.test(text)) {
 			matched = true;
+			match = ban.exec(text);
 			$.ajax({
 				url: "services/ban.php",
-				data: {user:text.substring(4)},
+				data: {user:match[1]},
 				method: "POST",
 				success: function(result) {
 					alert(result);
@@ -141,9 +143,10 @@ function parseCommand() {
 			});
 		} else if (ip.test(text)) {
 			matched = true;
+			match = ip.exec(text);
 			$.ajax({
 				url: "services/ip.php",
-				data: {user:text.substring(3)},
+				data: {user:match[1]},
 				method: "POST",
 				success: function(result) {
 					alert(result);
@@ -163,6 +166,19 @@ function parseCommand() {
 			$.ajax({
 				url: "services/dice_roll.php",
 				data: {diceNb:match[1], sideNb:match[2], bonus:match[3], params:(match[4]+' ')},
+				method: "POST",
+				success: function(result) {
+					if(result.length>0) {
+						alert(result);
+					}
+				}
+			});
+		} else if (remind.test(text)) {						
+			matched = true;
+			match = remind.exec(text);
+			$.ajax({
+				url: "services/remindMe.php",
+				data: {data:match[1]},
 				method: "POST",
 				success: function(result) {
 					if(result.length>0) {

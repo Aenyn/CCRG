@@ -7,7 +7,7 @@
 			$nameCheck = $res['name'];
 			$passCheck = $res['pass_hash'];
 			$salt = $res['salt'];
-			if(strpos(strtoupper($writer), strtoupper($nameCheck))!==false) {
+			if(strpos(strtoupper($nameCheck), strtoupper($writer))!==false) {
 				if(isset($_SESSION['pass'])) {
 					$pass = $_SESSION['pass'];
 					$passHash = hash("sha256", $pass.$salt);

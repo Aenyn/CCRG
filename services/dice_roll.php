@@ -84,7 +84,7 @@
 	}
 	
 	if(strpos($params, 'hidden ')!==false) {
-		$_SESSION['diceRoll'] = 'reveals his dice : ' . $content;
+		$_SESSION['diceRoll'] = $content;
 		$content = ' rolled ' . $diceNb . 'D' . $sideNb . $content;
 		$hidden = 'You ' . $content;
 		$content = $writer . ' rolled ' . $diceNb . 'D' . $sideNb;
