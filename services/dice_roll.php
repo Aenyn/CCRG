@@ -41,7 +41,7 @@
 				$low = $sideNb+1;
 				$detail = '(';
 				for($i=0; $i<$diceNb; $i++) {
-					$res = rand(1,$sideNb);
+					$res = mt_rand(1,$sideNb);
 					if($res>$high) {
 						$high = $res;
 					}
