@@ -32,7 +32,7 @@
 		$request->execute(array(':content' => $_SESSION['name'] . ' (' . $permission . ') vient de se connecter', ':ip' => $_SERVER['REMOTE_ADDR']));
 		header('Location: http://www.panicot.fr/ccrg/index.php');			
 	} else {
-		//echo $_SESSION['pass'];
+		//echo $_SESSION['pass'] . ' ' . $salt;
 		header('Location: http://www.panicot.fr/ccrg/password.php');
 	}
 

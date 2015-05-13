@@ -111,6 +111,7 @@ function parseCommand() {
 		var reveal = /\/reveal/;
 		var afk = /\/afk ?([ ,\w]*)/;
 		var noAfk = /\/not_afk/;
+		var register = /\/register (.+)/;
 		var matched = false;
 		if(nick.test(text)) {
 			matched = true;
@@ -254,6 +255,19 @@ function parseCommand() {
 		} else if (noAfk.test(text)) {						
 			matched = true;
 			unsetAfk();
+		}else if(register.test(text)) {
+			matched = true;
+			match = register.exec(text);			
+			$.ajax({
+				url: "services/register.php",
+				data: {pass:match[1]},
+				method: "POST",
+				success: function(result) {
+					if(result.length>0) {
+						alert(result);
+					}
+				}
+			});
 		}
 
 		if (!matched) {
