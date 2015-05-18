@@ -1,15 +1,3 @@
-function printLocalMessage(message) {	
-		var toRemove = document.getElementById('date_last_message');
-		var d = new Date();
-		var h = d.getHours();
-		var m = d.getMinutes();
-		toRemove.parentNode.removeChild(toRemove);
-		document.getElementById('main').innerHTML = document.getElementById('main').innerHTML + "<p>" + h + ':' + m + ' Local message> '+ message + "</p>" + "<div class='hidden' id='date_last_message'>" + toRemove.innerHTML + "</div>";
-		alert(toRemove.innerHTML);
-		alert(document.getElementById('date_last_message').innerHTML);
-		
-}
-
 function checkMessages() {
 	$.ajax({
 		url: "services/check_messages.php",
@@ -21,7 +9,7 @@ function checkMessages() {
 			var olddate = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
 			document.getElementById('newdate').innerHTML = curdate;
 			if (curdate>olddate) {
-				getNewMessages();
+				getMessages();
 				getAnnonce();
 				document.title = 'CCRG (New messages)';
 			}
@@ -36,7 +24,7 @@ function sendMessage(name, message) {
 		method: "POST",
 		data: {writer:name, content:message},
 		success:function() {
-			checkMessages();
+			getMessages();
 		}
 	})
 }
@@ -70,13 +58,12 @@ function getNewMessages() {
 	var date = document.getElementById('date_last_message').innerHTML;
 	$.ajax({
 		url: "services/get_messages.php",
-		method: "POST",
 		data:{date:date},
 		success:function(result) {
 			var toRemove = document.getElementById('date_last_message');
 			toRemove.parentNode.removeChild(toRemove);
 			document.getElementById('main').innerHTML = document.getElementById('main').innerHTML + result;
-			if(!locked) {
+			if(!scrollLock) {
 				document.getElementById('main').scrollTop = document.getElementById('main').scrollHeight;
 			}
 		}
@@ -132,11 +119,9 @@ function parseCommand() {
 			$.ajax({
 					url: "services/rename.php",
 					method : "POST",
-					data: {name:match[1]},
-					success: function() {
-						document.getElementById('user_name').innerHTML = match[1];						
-					}
+					data: {name:match[1]}
 			});
+			document.getElementById('user_name').innerHTML = match[1];
 		}
 		else if(kick.test(text)) {
 			matched = true;
@@ -185,7 +170,7 @@ function parseCommand() {
 				method: "POST",
 				success: function(result) {
 					if(result.length>0) {
-						printLocalMessage(result);
+						alert(result);
 					}
 				}
 			});
