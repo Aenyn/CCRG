@@ -46,9 +46,10 @@
 			document.onkeypress = restoreTitle;
 			<?php 
 			echo	"getMessages();
-					setInterval(checkMessages, 500);
+					setInterval(checkMessages, 100);
 					getOnline();
-					setInterval(getOnline, 1000);";
+					setInterval(getOnline, 1000);
+					getAnnonce()";
 			?>
 		</script>
 	</body>

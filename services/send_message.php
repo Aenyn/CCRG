@@ -37,6 +37,10 @@
 			
 			if((substr($content,0,7)==="http://")||(substr($content,0,8)==="https://")) {
 				$content = "<a href='" . $content ."'>". $content . "</a>";
+				if(strlen($content)>250) {
+					$content = substr($content, 0, 250);
+					$content = substr($content, 0, strlen($link)-4) . '</a>';
+				}
 			}
 			
 			$request->execute(array(':content' => $content, ':writer' => $writer, ':ip' => $_SERVER['REMOTE_ADDR']));

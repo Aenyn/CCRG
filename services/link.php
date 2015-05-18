@@ -43,7 +43,12 @@
 				VALUES (NOW(), :content, :writer, :ip)";
 
 			$request = $bdd->prepare($query);
-			$request->execute(array(':content' => '<a href="' . $content . '" target="_blank">' . $title . '</a>', ':writer' => $writer, ':ip' => $_SERVER['REMOTE_ADDR']));
+			$link = '<a href="' . $content . '" target="_blank">' . $title . '</a>';
+			if(strlen($link)>250) {
+				$link = substr($link, 0, 250);
+				$link = substr($link, 0, strlen($link)-5) . '</a>';
+			}
+			$request->execute(array(':content' => $link, ':writer' => $writer, ':ip' => $_SERVER['REMOTE_ADDR']));
 		}
     }
 	include 'kill_connection.php';
