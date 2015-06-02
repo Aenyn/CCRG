@@ -11,7 +11,7 @@
 	<body>
 		<div >
 			<form action="services/login.php" method="POST">
-				Password : <input type="password" id="login" name="pass" autocomplete="off" maxlength="255"/>
+				Password : <input type="text" id="login" name="pass" autocomplete="off" maxlength="255"/>
 			</form>
 		</div>
 	</body>
