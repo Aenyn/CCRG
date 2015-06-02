@@ -31,15 +31,26 @@ function sendMessage(name, message) {
 
 function getMessages() {
 	$.ajax({
-		url: "services/get_messages.php",
+		url: "services/get_messages_json.php",
 		success:function(result) {
+			var toRemove = document.getElementById('date_last_message');
+			toRemove.parentNode.removeChild(toRemove);
 			if(result=='kick') {
 				window.alert('Vous avez été kické de ce channel');
 				window.location.replace('http://www.staggeringbeauty.com/');
 			}
-			document.getElementById('main').innerHTML=result;
+			messages = [];
+			messages.push(result);
+			messages = $.parseJSON(messages[0]);
+			document.getElementById('main').innerHTML = "";
+			var maxDate;
+			messages.forEach(function(message) {
+				document.getElementById('main').innerHTML = document.getElementById('main').innerHTML + "<p>" + message.date.substr(11, 5) + ' ' + message.writer + "> " + message.content + " </p>";
+				maxDate = message.date;
+			});
+			document.getElementById('main').innerHTML= document.getElementById('main').innerHTML + "<div class='hidden' id='date_last_message'>" + maxDate + "</div>";
 			if(!locked) {
-				document.getElementById('main').scrollTop = document.getElementById('main').scrollHeight;
+				document.getElementById('main').scrollTo = document.getElementById('main').scrollHeight;
 			}
 		}
 	});
@@ -63,9 +74,18 @@ function getNewMessages() {
 		success:function(result) {
 			var toRemove = document.getElementById('date_last_message');
 			toRemove.parentNode.removeChild(toRemove);
-			document.getElementById('main').innerHTML = document.getElementById('main').innerHTML + result;
-			if(!scrollLock) {
-				document.getElementById('main').scrollTop = document.getElementById('main').scrollHeight;
+			messages = [];
+			messages.push(result);
+			messages = $.parseJSON(messages[0]);
+			document.getElementById('main').innerHTML = "";
+			var maxDate;
+			messages.forEach(function(message) {
+				document.getElementById('main').innerHTML = document.getElementById('main').innerHTML + "<p>" + message.date.substr(11, 5) + ' ' + message.writer + "> " + message.content + " </p>";
+				maxDate = message.date;
+			});
+			document.getElementById('main').innerHTML= document.getElementById('main').innerHTML + "<div class='hidden' id='date_last_message'>" + maxDate + "</div>";
+			if(!locked) {
+				document.getElementById('main').scrollTo = document.getElementById('main').scrollHeight;
 			}
 		}
 	});

@@ -7,6 +7,8 @@
 
 	include 'connectbdd.php';
 	
+	$json = array();
+	
     if(isset($_SESSION['name'])) {
 		$check = $bdd->prepare("SELECT kicked FROM ccrg_users WHERE name = :name");
 		$check->execute(array(':name' => substr($_SESSION['name'], 0, 25)));
@@ -16,14 +18,14 @@
 			$q->execute(array(':name' => substr($_SESSION['name'], 0, 25)));
 			echo "kick";
 		}  else {
-			if(isset($_POST['date'])) {
+			if(isset($_SESSION['date'])) {
 				$query = $bdd->prepare("SELECT writer, date, content 
 					FROM ccrg_messages
 					WHERE date > :date
 					ORDER BY date ASC");
-				$query->execute(array(':date' => $_POST['date']));
+				$query->execute(array(':date' => $_SESSION['date']));
 				while($messages=$query->fetch()) {
-					echo "<p>". substr($messages['date'], 11, 5) . ' ' . $messages['writer'] . "> " . $messages['content']. " </p>";
+					echo "<p>". $messages['writer'] . "> " . $messages['content']. " </p>";
 					$date = $messages['date'];
 				}
 				echo "<div class='hidden' id='date_last_message'>" . $date . "</div>";
@@ -39,10 +41,11 @@
 					) SQ
 					ORDER BY date ASC");
 				while($messages=$query->fetch()) {
-					echo "<p>". substr($messages['date'], 11, 5) . ' ' . $messages['writer'] . "> " . $messages['content']. " </p>";
+					array_push($json, $messages);
 					$date = $messages['date'];
 				}
-				echo "<div class='hidden' id='date_last_message'>" . $date . "</div>";
+				$json = json_encode($json);
+				echo $json;
 			}	
 		}
 	}

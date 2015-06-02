@@ -12,7 +12,7 @@
 		<title>CCRG</title>
 	</head>
 	<body>
-		<script src='js/ccrg.js'></script>
+		<script src='js/ccrg_exp.js'></script>
 		<script>	
 			<?php echo "var username = '" . $_SESSION['name'] . "'";?>
 			
