@@ -27,6 +27,7 @@
 		$params = 'sum detail hidden ';
 	}
 
+	$resultArray[] = array();
     if(isset($_POST['diceNb']) && isset ($_POST['sideNb']) && isset($_SESSION['name'])) {
         $diceNb = htmlspecialchars($_POST['diceNb']);
         $sideNb = htmlspecialchars($_POST['sideNb']);
@@ -42,6 +43,7 @@
 				$detail = '(';
 				for($i=0; $i<$diceNb; $i++) {
 					$res = mt_rand(1,$sideNb);
+					$resultArray[] = $res;
 					if($res>$high) {
 						$high = $res;
 					}
@@ -81,6 +83,36 @@
 	
 	if(strpos($params, 'detail ')!==false) {		
 		$content = $content . ' ' . $detail;
+	}
+	
+	// repetition
+	$repeatPattern = '/obj (<|>|<=|>=)?(\d+) (total|tot|each)/';
+	$match = array();
+	if(preg_match($repeatPattern, $params, $match)==1) {
+		if($match[3]=='each') {
+			$successNb = 0;
+			foreach($resultArray as $roll) {
+				if($match[1]=='>') {
+					if($roll>$match[2]) {
+						$successNb++;
+					}
+				} else if ($match[1]=='<'){
+					if($roll<$match[2]) {
+						$successNb++;
+					}
+				} else if ($match[1]=='>='){
+					if($roll>=$match[2]) {
+						$successNb++;
+					}
+				} else {
+					if($roll<=$match[2]) {
+						$successNb++;
+					}
+				}
+			}
+			$content = $content . ' diff: ' . $match[2] . ' success: ' . $successNb;
+			echo $match[0];
+		}
 	}
 	
 	if(strpos($params, 'hidden ')!==false) {
